@@ -12,12 +12,22 @@ import (
 const apiKey = "b054bd15f679b434c262790df45a62ba"
 
 func FetchConversionRate(from, to, date string, amount float64) (float64, error) {
-	var apiUrl string
+	// Check for mock response in test mode
+	if isMock, resp, err := getFetchResponse(); isMock {
+		return resp, err
+	}
 
 	// Sanitize inputs by trimming whitespace
 	from = strings.TrimSpace(from)
 	to = strings.TrimSpace(to)
 	date = strings.TrimSpace(date)
+
+	// Validate currency codes
+	if len(from) < 3 || len(to) < 3 {
+		return 0, fmt.Errorf("invalid currency code length: must be at least 3 characters")
+	}
+
+	var apiUrl string
 
 	if date == "" {
 		apiUrl = fmt.Sprintf("https://api.coinlayer.com/convert?access_key=%s&from=%s&to=%s&amount=%.6f",
@@ -57,7 +67,13 @@ func FetchConversionRate(from, to, date string, amount float64) (float64, error)
 		if !result.Success {
 			return 0, fmt.Errorf("%s", result.Error.Info)
 		}
-		rate := result.Rates[to]
+		rate, exists := result.Rates[to]
+		if !exists {
+			return 0, fmt.Errorf("rate not available for currency: %s", to)
+		}
+		if rate <= 0 {
+			return 0, fmt.Errorf("invalid rate returned from API")
+		}
 		return rate * amount, nil
 	}
 }
