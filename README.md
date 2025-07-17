@@ -2,6 +2,10 @@
 
 A lightweight and scalable backend service built in Go to fetch real-time and historical currency exchange rates. Built as part of the GreedyGame Backend Assignment.
 
+> 🌐 **Live Backend**: [https://exchange-rate-service-f42x.onrender.com](https://exchange-rate-service-f42x.onrender.com)
+> 
+> ⚠️ **Note**: The service is hosted on Render's free tier. Initial startup may take up to 5 minutes when the service is idle.
+
 ## 🚀 Features
 
 - ✅ Convert currency between supported pairs
@@ -84,9 +88,17 @@ Convert currency using latest or historical rates.
 #### 🔁 Example Requests:
 
 ```bash
+# Local endpoint
 curl "http://localhost:8080/convert?from=USD&to=INR"
-curl "http://localhost:8080/convert?from=USD&to=INR&amount=100"
-curl "http://localhost:8080/convert?from=EUR&to=JPY&amount=50&date=2024-06-01"
+
+# Live endpoint (Render)
+curl "https://exchange-rate-service-f42x.onrender.com/convert?from=USD&to=INR"
+
+# With amount parameter
+curl "https://exchange-rate-service-f42x.onrender.com/convert?from=USD&to=INR&amount=100"
+
+# With historical date
+curl "https://exchange-rate-service-f42x.onrender.com/convert?from=EUR&to=JPY&amount=50&date=2024-06-01"
 ```
 
 #### 📦 Example Response:
