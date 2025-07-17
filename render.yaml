@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: exchange-rate-service
+    runtime: go
+    buildCommand: go build -o app ./cmd
+    startCommand: ./app
+    repo: https://github.com/vignesh05p/exchange-rate-service
+    branch: main
